@@ -14,6 +14,8 @@ RUN if [ ${HTTPS_MIRROR} = true ]; then \
   sed -i "s/https:\/\//http:\/\//g" /etc/apt/sources.list \
   ;fi
 
+ADD ./conf/my.cnf /etc/mysql/conf.d/my.cnf
+
 ENV TIMEZONE $CONTAINER_TIMEZONE
 RUN apt-get -y update \
   && ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime \

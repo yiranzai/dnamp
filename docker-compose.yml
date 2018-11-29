@@ -11,10 +11,10 @@ services:
       - "80:80"
     restart: always
     volumes:
-      - ./webroot:/var/www/html/:rw
+      - ./php-apache/webroot:/var/www/html/:rw
       - ./nginx/vhosts:/etc/nginx/vhosts:rw
       - ./nginx/upstream:/etc/nginx/upstream:rw
-      - ./nginx/logs:/var/log/nginx:rw
+      # - ./nginx/logs:/var/log/nginx:rw
     environment:
       TZ: ${TZ}
     networks:
@@ -28,9 +28,9 @@ services:
     container_name: php-apache
     restart: always
     volumes:
-      - ./webroot:/var/www/html/:rw
+      - ./php-apache/webroot:/var/www/html/:rw
       - ./php-apache/sites-available:/etc/apache2/sites-available:rw
-      - ./php-apache/logs:/var/log/apache2/logs:rw
+      - ./php-apache/logs:/var/log/apache2:rw
     environment:
       TZ: ${TZ}
     networks:
@@ -39,10 +39,15 @@ services:
     build:
       context: ./mysql
     restart: always
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PWD}
       SET_CONTAINER_TIMEZONE: "TRUE"
       CONTAINER_TIMEZONE: ${TZ}
+      MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST}
+      DEB_CUSTOMIZE_MIRROR: ${DEB_CUSTOMIZE_MIRROR}
+    ports:
+      - "${MYSQL_PORT}:3306"
     networks:
       - webnet
     volumes:

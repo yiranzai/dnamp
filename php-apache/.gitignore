@@ -8,3 +8,4 @@
 !sites-enabled
 !sites-available
 !.env.example
+!apache2.conf
