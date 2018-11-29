@@ -1,0 +1,68 @@
+version: "3.7"
+services:
+  nginx:
+    build:
+      context: ./nginx
+      args:
+        DEB_CUSTOMIZE_MIRROR: ${CUSTOMIZE_MIRROR}
+        HTTPS_MIRROR: ${HTTPS_MIRROR}
+    container_name: nginx
+    ports:
+      - "80:80"
+    restart: always
+    volumes:
+      - ./webroot:/var/www/html/:rw
+      - ./nginx/vhosts:/etc/nginx/vhosts:rw
+      - ./nginx/upstream:/etc/nginx/upstream:rw
+      - ./nginx/logs:/var/log/nginx:rw
+    environment:
+      TZ: ${TZ}
+    networks:
+      - webnet
+  php-apache:
+    build:
+      context: ./php-apache
+      args:
+        DEB_CUSTOMIZE_MIRROR: ${DEB_CUSTOMIZE_MIRROR}
+        HTTPS_MIRROR: ${HTTPS_MIRROR}
+    container_name: php-apache
+    restart: always
+    volumes:
+      - ./webroot:/var/www/html/:rw
+      - ./php-apache/sites-available:/etc/apache2/sites-available:rw
+      - ./php-apache/logs:/var/log/apache2/logs:rw
+    environment:
+      TZ: ${TZ}
+    networks:
+      - webnet
+  mysql:
+    build:
+      context: ./mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PWD}
+      SET_CONTAINER_TIMEZONE: "TRUE"
+      CONTAINER_TIMEZONE: ${TZ}
+    networks:
+      - webnet
+    volumes:
+      # - ./mysql/conf/my.cnf:/etc/mysql/my.cnf:ro
+      - ${DATA_PATH}:/var/lib/mysql/:rw
+      - ./mysql/logs/:/var/log/mysql/:rw
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    networks:
+      - webnet
+    ports:
+      - "${REDIS_PORT}:6379"
+networks:
+  webnet:
+volumes:
+  webroot:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${WEB_ROOT}
+      o: bind

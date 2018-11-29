@@ -1,0 +1,10 @@
+# Created by .ignore support plugin (hsz.mobi)
+/*
+!.gitignore
+!Dockerfile
+!conf
+!composer.phar
+!logs
+!sites-enabled
+!sites-available
+!.env.example
