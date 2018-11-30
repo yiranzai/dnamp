@@ -2,10 +2,10 @@ FROM php:7.2-apache
 
 
 
-RUN  rm -rf /etc/apache2/sites-available/* /etc/apache2/sites-enabled/*
+# RUN  rm -rf /etc/apache2/sites-available/* /etc/apache2/sites-enabled/*
 
-COPY ./sites-available/ /etc/apache2/sites-available/
-COPY ./apache2.conf /etc/apache2/apache2.conf
+# COPY ./sites-available/ /etc/apache2/sites-available/
+# COPY ./apache2.conf /etc/apache2/apache2.conf
 
 
 ARG DEB_CUSTOMIZE_MIRROR
@@ -30,5 +30,5 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 RUN apt-get -y update \
   && useradd -M -s"/sbin/nologin" -U www \
   && chown -R www:www /var/www/html/ \
-  && docker-php-ext-install bcmath 
+  && docker-php-ext-install bcmath pdo_mysql
   # && a2ensite test.cn \

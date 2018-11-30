@@ -11,10 +11,12 @@ services:
       - "80:80"
     restart: always
     volumes:
-      - ./php-apache/webroot:/var/www/html/:rw
+      - ./webroot:/var/www/html/:rw
       - ./nginx/vhosts:/etc/nginx/vhosts:rw
       - ./nginx/upstream:/etc/nginx/upstream:rw
-      # - ./nginx/logs:/var/log/nginx:rw
+      - ./nginx/logs:/var/log/nginx:rw
+      - ./nginx/proxy.conf:/etc/nginx/proxy.conf:rw
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:rw
     environment:
       TZ: ${TZ}
     networks:
@@ -28,9 +30,12 @@ services:
     container_name: php-apache
     restart: always
     volumes:
-      - ./php-apache/webroot:/var/www/html/:rw
+      - ./webroot:/var/www/html/:rw
       - ./php-apache/sites-available:/etc/apache2/sites-available:rw
+      - ./php-apache/sites-enabled:/etc/apache2/sites-enabled:rw
       - ./php-apache/logs:/var/log/apache2:rw
+      - ./php-apache/php_conf/php.ini:/usr/local/etc/php/php.ini:rw
+      - ./php-apache/apache2.conf:/etc/apache2/apache2.conf:rw
     environment:
       TZ: ${TZ}
     networks:
@@ -51,7 +56,7 @@ services:
     networks:
       - webnet
     volumes:
-      # - ./mysql/conf/my.cnf:/etc/mysql/my.cnf:ro
+      - ./mysql/conf/my.cnf:/etc/mysql/my.cnf:rw
       - ${DATA_PATH}:/var/lib/mysql/:rw
       - ./mysql/logs/:/var/log/mysql/:rw
   redis:

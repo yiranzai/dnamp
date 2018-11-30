@@ -1,7 +1,7 @@
 FROM nginx:1.14.0
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./proxy.conf /etc/nginx/proxy.conf
+# COPY ./nginx.conf /etc/nginx/nginx.conf
+# COPY ./proxy.conf /etc/nginx/proxy.conf
 
 
 ARG DEB_CUSTOMIZE_MIRROR=deb.debian.org
