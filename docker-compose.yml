@@ -11,6 +11,7 @@ services:
       - "80:80"
     restart: always
     volumes:
+      - sslroot:/etc/nginx/ssl
       - ./webroot:/var/www/html/:rw
       - ./nginx/vhosts:/etc/nginx/vhosts:rw
       - ./nginx/upstream:/etc/nginx/upstream:rw
@@ -70,6 +71,12 @@ services:
 networks:
   webnet:
 volumes:
+  sslroot:
+    dirver: local
+    driver_opts:
+      type: none
+      device: ${SSL_ROOT}
+      o: bind
   webroot:
     driver: local
     driver_opts:
