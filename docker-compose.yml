@@ -31,12 +31,14 @@ services:
     container_name: php-apache
     restart: always
     volumes:
-      - ./webroot:/var/www/html/:rw
+      - ./webroot:/var/www/html/:rwx
       - ./php-apache/sites-available:/etc/apache2/sites-available:rw
       - ./php-apache/sites-enabled:/etc/apache2/sites-enabled:rw
       - ./php-apache/logs:/var/log/apache2:rw
       - ./php-apache/php_conf/php.ini:/usr/local/etc/php/php.ini:rw
       - ./php-apache/apache2.conf:/etc/apache2/apache2.conf:rw
+      - ./php-apache/supervisor/conf.d:/etc/supervisor/conf.d:rw
+      - ./php-apache/supervisor/supervisor.conf:/etc/supervisor/supervisord.conf:rw
     environment:
       TZ: ${TZ}
     networks:
@@ -61,18 +63,23 @@ services:
       - ${DATA_PATH}:/var/lib/mysql/:rw
       - ./mysql/logs/:/var/log/mysql/:rw
   redis:
-    image: redis:latest
+    image: redis:alpine
+    # build:
+    #   context: ./redis
     container_name: redis
     restart: always
     networks:
       - webnet
     ports:
       - "${REDIS_PORT}:6379"
+    volumes:
+      - ./redis/redisd.conf:/etc/redis/redisd.conf:rw
+    command: redis-server /etc/redis/redisd.conf
 networks:
   webnet:
 volumes:
   sslroot:
-    dirver: local
+    driver: local
     driver_opts:
       type: none
       device: ${SSL_ROOT}

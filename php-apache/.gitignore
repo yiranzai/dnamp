@@ -10,3 +10,4 @@
 !.env.example
 !apache2.conf
 !php_conf
+!supervisor
