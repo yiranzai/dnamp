@@ -31,7 +31,7 @@ services:
     container_name: php-apache
     restart: always
     volumes:
-      - ./webroot:/var/www/html/:rwx
+      - ./webroot:/var/www/html/:rw
       - ./php-apache/sites-available:/etc/apache2/sites-available:rw
       - ./php-apache/sites-enabled:/etc/apache2/sites-enabled:rw
       - ./php-apache/logs:/var/log/apache2:rw

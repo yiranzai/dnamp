@@ -22,7 +22,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ 
 
 RUN apt-get -y update \
     && apt-get -y install supervisor \
+    && apt-get -y install zlib1g-dev \
     && useradd -M -s"/sbin/nologin" -U www \
     && chown -R www:www /var/www/html/ \
-    && docker-php-ext-install bcmath pdo_mysql
+    && docker-php-ext-install bcmath pdo_mysql zip
 # && a2ensite test.cn \
