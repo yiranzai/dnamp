@@ -2,6 +2,6 @@
 dcoker+nginx+apache+mysql+php
 ## use
 ```bash
-cp .env.json.example .env.json
+cp .env.example .env
 docker-compose up -d
 ```
